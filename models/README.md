@@ -1,0 +1,1 @@
+## Untuk menyimpan model yang telah ditraining
