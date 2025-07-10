@@ -1,1 +1,2 @@
+*.h5 filter=lfs diff=lfs merge=lfs -text
 models/fixedLR1e-4/FixedLR1e-4.h5 filter=lfs diff=lfs merge=lfs -text
