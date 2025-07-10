@@ -1,4 +1,2 @@
-models/exponential/ExpDecay.h5
-models/cosine/CosineDecay.h5
 venv
 .env
