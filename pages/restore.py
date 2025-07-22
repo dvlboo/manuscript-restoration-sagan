@@ -8,6 +8,7 @@ from utils.spectral_norm import SpectralNormalization
 from utils.self_attention import SelfAttention
 from utils.normalization import normalize_data
 from utils.metrics import calculate_psnr, calculate_ssim
+from utils.damage_detector import detect_damage_and_percentage
 import os
 
 # Fungsi untuk mengambil daftar model dari folder 'models'
@@ -67,6 +68,9 @@ def run():
         generated_img = generator.predict(input_tensor)[0]
         generated_img = np.clip(generated_img * 127.5 + 127.5, 0, 255).astype(np.uint8)
 
+        # Deteksi kerusakan dan persentase
+        damage_pct, boxed_img = detect_damage_and_percentage(image_rgb, generated_img)
+
         # Evaluasi metrik
         orig_gray = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2GRAY)
         restored_gray = generated_img.squeeze()
@@ -78,7 +82,7 @@ def run():
         col1, col2 = st.columns(2)
         with col1:
           st.image(image_rgb, caption="Gambar Asli (Rusak)")
-          st.markdown(f"**LR:** `{selected_model_name}`  \n**PSNR:** {psnr:.2f} dB  \n**SSIM:** {ssim:.4f}")
+          st.markdown(f"**LR:** `{selected_model_name}`  \n**PSNR:** {psnr:.2f} dB  \n**SSIM:** {ssim:.4f} \n**Kerusakan:** {damage_pct}%")
         with col2:
           st.image(generated_img, caption="Hasil Restorasi")
 
