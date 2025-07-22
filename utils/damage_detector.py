@@ -5,21 +5,17 @@ def detect_damage_and_percentage(original_img, restored_img, diff_thresh=30, are
     """
     Mendeteksi area kerusakan pada gambar berdasarkan perbedaan antara original dan hasil restorasi.
     Menyediakan bounding box dan persentase kerusakan.
-
-    Parameters:
-    - original_img: gambar input (RGB)
-    - restored_img: hasil restorasi (RGB)
-    - diff_thresh: ambang batas perbedaan piksel (0-255)
-    - area_thresh: ukuran area minimum untuk dianggap kerusakan
-
-    Returns:
-    - damage_percentage: persentase piksel yang rusak
-    - boxed_img: gambar original dengan bounding box merah
     """
-    # Resize agar ukuran sama (jaga-jaga)
+    # Resize agar ukuran sama
     h, w = 256, 256
     original_resized = cv2.resize(original_img, (w, h))
     restored_resized = cv2.resize(restored_img, (w, h))
+
+    # Pastikan kedua gambar dalam format RGB (3 channel)
+    if len(original_resized.shape) == 2:
+        original_resized = cv2.cvtColor(original_resized, cv2.COLOR_GRAY2RGB)
+    if len(restored_resized.shape) == 2 or restored_resized.shape[-1] == 1:
+        restored_resized = cv2.cvtColor(restored_resized, cv2.COLOR_GRAY2RGB)
 
     # Hitung perbedaan absolut
     diff = cv2.absdiff(original_resized, restored_resized)
@@ -41,6 +37,6 @@ def detect_damage_and_percentage(original_img, restored_img, diff_thresh=30, are
         area = cv2.contourArea(cnt)
         if area > area_thresh:
             x, y, w_box, h_box = cv2.boundingRect(cnt)
-            cv2.rectangle(boxed_img, (x, y), (x + w_box, y + h_box), (255, 0, 0), 2)  # biru (RGB)
+            cv2.rectangle(boxed_img, (x, y), (x + w_box, y + h_box), (255, 0, 0), 2)  # biru
 
     return damage_percentage, boxed_img
