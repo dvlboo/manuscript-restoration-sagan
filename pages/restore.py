@@ -82,7 +82,12 @@ def run():
         col1, col2 = st.columns(2)
         with col1:
           st.image(image_rgb, caption="Gambar Asli (Rusak)")
-          st.markdown(f"**LR:** `{selected_model_name}`  \n**PSNR:** {psnr:.2f} dB  \n**SSIM:** {ssim:.4f} \n**Kerusakan:** {damage_pct}%")
+          st.markdown(f"""
+            **LR:** {selected_model_name}  
+            **PSNR:** {psnr:.2f} dB  
+            **SSIM:** {ssim:.4f}  
+            **Kerusakan Terdeteksi:** {damage_pct}%
+            """)
         with col2:
           st.image(generated_img, caption="Hasil Restorasi")
 
